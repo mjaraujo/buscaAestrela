@@ -106,6 +106,7 @@ public class Jogo extends JPanel implements Runnable{
     private void init(){
         image = new BufferedImage(Janela.LARGURA,Janela.ALTURA, BufferedImage.TYPE_INT_ARGB);
         g2d = image.createGraphics();
+        achouCaminho = false;
         criaCenario();
         associaVizinhos();
         calcularH();
@@ -183,9 +184,9 @@ public class Jogo extends JPanel implements Runnable{
         }
         int x= gerador.nextInt(10);
         int y = gerador.nextInt(10);
+      
         agente = new Agente(new Rectangle(64*x,64*y,64,64), false, false);
         agente.setTerreno(terrenos.get(10*y+x));
-        entidades.add(agente);
         terrenos.get(10*y+x).setAgente(true);
         
               
@@ -198,6 +199,7 @@ public class Jogo extends JPanel implements Runnable{
             terrenos.get(10*y+x).setBuraco(true);
             
         }
+        entidades.add(agente);
         
         
         int margemEsq = 670;
@@ -310,6 +312,11 @@ public class Jogo extends JPanel implements Runnable{
                             pilhaCaminho.push(dir);
                             aux=aux.getPai();
                         }while(aux!=null);
+                        agente.setCaminho(pilhaCaminho);
+                        agente.setDirecao((Agente.enumDirecao) pilhaCaminho.pop());
+                        agente.setDirecao((Agente.enumDirecao) pilhaCaminho.pop());
+                        agente.setEstado(Agente.Estados.ANDAR);
+                        
                         
                     }
                     for(Terreno u:listaFechada){
@@ -348,13 +355,13 @@ public class Jogo extends JPanel implements Runnable{
     }
     private void atualiza(){
         if(mouseInput.isBotaoEsquerdo()){
+            if(achouCaminho){
+                mouseInput.setBotaoEsquerdo(false);
+                return;
+            }
+
             atualizaTerrenos();
             int i=0;
-            
-            
-            
-            
-          
             
             for(Terreno t:terrenos){
                 if(t.isBuraco()){
@@ -377,6 +384,7 @@ public class Jogo extends JPanel implements Runnable{
             }
             
             mouseInput.setBotaoEsquerdo(false);
+            
         }else if (mouseInput.isBotaoDireito()){
             init();
             mouseInput.setBotaoDireito(false);
@@ -432,23 +440,23 @@ public class Jogo extends JPanel implements Runnable{
             
             if(t.getPai()!=null){
                 if(t.getPai()==t.getVizinhoCima()){
-                    g2d.drawString("o", t.getRetangulo().x + t.getRetangulo().width/2, t.getRetangulo().y+10);
+                    g2d.drawString("A", t.getRetangulo().x + t.getRetangulo().width/2, t.getRetangulo().y+10);
                 }
                 if(t.getPai()==t.getVizinhoBaixo()){
-                    g2d.drawString("o", t.getRetangulo().x + t.getRetangulo().width/2, t.getRetangulo().y+t.getRetangulo().height-10);
+                    g2d.drawString("V", t.getRetangulo().x + t.getRetangulo().width/2, t.getRetangulo().y+t.getRetangulo().height-10);
                 }
                 if(t.getPai()==t.getVizinhoEsquerda()){
-                    g2d.drawString("o", t.getRetangulo().x +5, t.getRetangulo().height/2+t.getRetangulo().y);
+                    g2d.drawString("<", t.getRetangulo().x +5, t.getRetangulo().height/2+t.getRetangulo().y);
                 }
                 if(t.getPai()==t.getVizinhoDireita()){
-                    g2d.drawString("o", t.getRetangulo().x +t.getRetangulo().width-10, t.getRetangulo().height/2+t.getRetangulo().y);
+                    g2d.drawString(">", t.getRetangulo().x +t.getRetangulo().width-10, t.getRetangulo().height/2+t.getRetangulo().y);
                 }
             }
             
             
             
         }
-        g2d.drawString("Custo do caminho: "+ String.valueOf(custoCaminho), 630,400);
+        g2d.drawString("Custo do caminho: "+ String.valueOf(custoCaminho), 650,400);
         if(achouCaminho){
             Terreno aux = null;
             for(Terreno t: terrenos){
@@ -490,8 +498,8 @@ public class Jogo extends JPanel implements Runnable{
     
     private void update() {
         
-        if(agente.getEstado()==Agente.Estados.PARAR)
             agente.update();
+        
         
      // TODO Auto-generated method stub
     }

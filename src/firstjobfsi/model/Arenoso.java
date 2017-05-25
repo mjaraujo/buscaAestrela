@@ -22,8 +22,8 @@ public class Arenoso extends Terreno{
         setG(4);
         setImage(bil.carregaImagem("tudo"));
         sheet = new SpriteSheet(getImage());
-        setImage(sheet.grabImage(5, 2, retangulo.width, retangulo.height));  
-        setLegenda(new TextoTela("Arenoso: " + getG(), new Point(retangulo.getLocation().x,retangulo.y+retangulo.height-30), Color.red));
+        setImage(sheet.grabImage(2, 1, retangulo.width, retangulo.height));  
+        setLegenda(new TextoTela("Arenoso: " + getG(), new Point(retangulo.getLocation().x,retangulo.y+retangulo.height+10), Color.red));
     }
     
     

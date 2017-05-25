@@ -22,8 +22,8 @@ public class Pantano extends Terreno{
         setG(20);
         setImage(bil.carregaImagem("tudo"));
         sheet = new SpriteSheet(getImage());
-        setImage(sheet.grabImage(4, 2, retangulo.width, retangulo.height));    
-        setLegenda(new TextoTela("Pântano: " + getG(), new Point(retangulo.getLocation().x,retangulo.y+retangulo.height-30), Color.red));
+        setImage(sheet.grabImage(1, 1, retangulo.width, retangulo.height));    
+        setLegenda(new TextoTela("Pântano: " + getG(), new Point(retangulo.getLocation().x,retangulo.y+retangulo.height+10), Color.red));
     }
     
     
